@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/home/sodyam/Bureau/LINUX/WEB PROJECT/DJANGO/ecommerceSite/venv/bin/python" "$0" "$@"
+'''exec' "/home/sodyam/Bureau/LINUX/WEB PROJECT/DJANGO/ecommerceSite/venv/bin/python3" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re
