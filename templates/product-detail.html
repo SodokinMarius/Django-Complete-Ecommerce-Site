@@ -1,0 +1,44 @@
+
+{% extends 'base.html' %}
+
+{% block title %}
+{{produit_detail.title}}
+{% endblock %}
+
+  {% block content %}
+
+  <h1 class=" p-5 text-center border-b-2">{{produit_detail.title}} </h1>
+  <div class="container">
+    
+   <div class="row">
+    
+    <div class="col-sm-12 col-md-6">
+        <img src="{{ produit_detail.image.url }}" alt="wait loading..." class=" img-fluid border-1" />
+    </div>
+
+    <div class="col-sm-12 col-md-6">
+        <h3 class=" p-5 fw-bold">{{produit_detail.title}} </h3>
+        <p class="fs-5 fw-bold"> Nombre de Vues :  <span class="text-primary">{{produit_detail.view_count}} </span> </p>
+        <p class="fs-4"><span class="fs-5 fw-bold"> Categorie : </span> {{produit_detail.category.title}} </p>
+
+        <p class=" fs-5"><span class="fs-5 fw-bold"> Prix :  </span><strike>{{produit_detail.marked_price}} FCFA </strike><span class="text-danger  fs-4">{{produit_detail.selling_price}} FCFA</span> </p>
+
+        <p class=" fs-5 mt-3"><span class="fs-5 fw-bold">  Description : </span>  <br>{{produit_detail.description}} </p>
+
+        <p class="fs-5"> <span class="fw-bold"> warranty : </span> {{produit_detail.warranty}} </p>
+
+        <p class="fs-5"> <span class="fw-bold">Politique de Retour :  </span>{{produit_detail.return_policy}} </p>
+
+        <p> <a href="#" class="btn btn-primary fs-6">Add to Cart</a></p>
+    
+    </div>
+  </div>
+
+  </div>
+
+   {% endblock %}
+
+        
+
+
+

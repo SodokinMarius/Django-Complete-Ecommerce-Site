@@ -2,17 +2,23 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  Home
+ Articles
 {% endblock %}
 
   {% block content %}
 
-  <h1 class=" p-5">Bienvenue notre plateforme d'Ecommerce !! Nous somme là pour votre satisfaction</h1>
+  <h1 class=" p-5">Visualisez nos produits vendus par catégorie </h1>
   <div class="container">
-
+ 
+    {% for categorie in categories %}
+    {% if  categorie.product_set.all %}
+    <h1 class="fw-bold fs-4">{{categorie.title}}</h1> <hr>
    
    <div class="row">
-    {% for produit in products %}
+    
+   
+    {% for produit in categorie.product_set.all %}
+    
     <div class="col col-md-4">
       <div class="card shadow border-2 border-primary img-fluid mb-2" style="width: 18rem; height:fix-content; object-fit:cover;">
         <img src="{{ produit.image.url }}" class="card-img-top" alt="loading ...">
@@ -20,8 +26,7 @@
           <h5 class="card-title fw-bolder">{{produit.title}}</h5>
           <p class="card-text text-center mt-3"> <strike>Price : {{produit.marked_price}} F CFA  </strike>| <span class="fw-bolder"> Ps : {{produit.selling_price}} F CFA <span></p>
           <a href="#" class="btn btn-primary fs-6">Add to Cart</a>
-          <a href="#" class="btn btn-dark fs-6">Details</a>
-
+          <a href="{%  url 'ecommerceApp:product-detail' produit.slug %}" class="btn btn-dark fs-6">Details</a>
         </div>
       </div>
 
@@ -29,7 +34,11 @@
 
     {% endfor %}
   </div>
+  {% endif %}
+  {% endfor %}
+
   
+
   </div>
 
    {% endblock %}
