@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
@@ -13,7 +14,6 @@ class HomeView(TemplateView):
         context['products']=Product.objects.all().order_by('-title')
         return  context
    
-
 
 class AboutView(TemplateView):
     template_name = "about.html"
@@ -42,3 +42,61 @@ class ProductDetailView(TemplateView):
         produit.save()
         context['produit_detail']=produit
         return  context
+
+  
+class  AddToCartView(TemplateView):
+    template_name="add_to_cart.html"
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product_id=self.kwargs['id']
+        product=Product.objects.get(id=product_id) # let's retrieve the product
+        
+        #retrive cart_id
+        cart_id=self.request.session.get("cart_id",None)    # Retrive the cart id
+        
+        if cart_id:
+            cart_obj = Cart.objects.get(id=cart_id) # Retrieve the cart obj
+            
+            #verifying that the product exists in the cart
+       
+            this_product_in_cart=cart_obj.cartproduct_set.filter(product=product) 
+            if this_product_in_cart.exists():
+                cartproduct =this_product_in_cart.first()
+                cartproduct.quantity += 1
+                cartproduct.subtotal += product.selling_price
+                cartproduct.save()
+                
+                cart_obj.total += product.selling_price
+                cart_obj.save()
+            else :
+                cartproduct = CartProduct.objects.create(
+                    cart=cart_obj,
+                    product=product,
+                    rate=product.selling_price,
+                    quantity=1,
+                    subtotal = product.selling_price
+                    ) 
+                
+                cartproduct.save()
+                cart_obj.total += product.selling_price
+                cart_obj.save()
+                
+        #if Cart doesn't exists
+        else :
+            cart_obj = Cart.objects.create(total=0)
+            cart_id = self.request.session.get("cart_id")
+            cartproduct = CartProduct.objects.create(
+                    cart=cart_obj,
+                    product=product,
+                    rate=product.selling_price,
+                    quantity=1,
+                    subtotal = product.selling_price
+                    ) 
+                
+            cartproduct.save()
+            cart_obj.total += product.selling_price
+            cart_obj.save()
+
+        return context
+    
