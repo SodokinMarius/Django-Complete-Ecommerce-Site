@@ -7,6 +7,7 @@ from .views import (
     ProductsView,
     ProductDetailView, 
     AddToCartView,  
+    CartContentView,
 )
 
 app_name="ecommerceApp"
@@ -17,4 +18,6 @@ urlpatterns = [
     path("products/",ProductsView.as_view(),name="products"),
     path("product/<slug:slug>/",ProductDetailView.as_view(),name="product-detail"),
     path("add-to-cart/<int:id>/",AddToCartView.as_view(),name="add-to-cart"),
+    path("cart-content/",CartContentView.as_view(),name="cart-content"),
+
 ]

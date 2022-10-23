@@ -1,0 +1,63 @@
+
+{% extends 'base.html' %}
+
+{% block title %}
+ Cart Content
+{% endblock %}
+
+  {% block content %}
+
+  <h1 class=" p-5 text-center border-b-2">Contenu du Panier</h1>
+  <div class="container">
+    
+   <div class="row">
+    
+    <div class="col-sm-12 col-md-12">
+        <table class="table table-secondary table-hover">
+            <thead>
+                <tr>
+                    
+                  <th scope="col">N°</th>
+                  <th scope="col">Produit</th>
+                  <th scope="col">Montant Evalué</th>
+                  <th scope="col">Quantité</th>
+                  <th scope="col">Total</th>
+                  <th scope="col">Action</th>
+
+                </tr>
+              </thead>
+              <tbody>
+
+                {% for cart_product in  cart.cartproduct_set.all %}
+                <tr>
+                  <th scope="row">{{ forloop.counter }}</th>
+                  <td>{{cart_product.product.title}}</td>
+                  <td>{{cart_product.rate }} F CFA</td>
+                  <td>{{cart_product.quantity}}</td>
+                  <td>{{cart_product.subtotal}} F CFA </td>
+                  <td> 
+
+                    <a href="" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                    <a href="" class="btn btn-warning text-light"><i class="fa fa-minus"></i></a>
+                    <a href="" class="btn btn-danger fw-bolder">x</a>
+                </td>
+
+                </tr>
+               
+                {% endfor %}
+                 
+                <tr>
+                    <td colspan='3' class='text-end'>Total  :</td>
+                    <td class="fs-3 fw-bold text-primary"  colspan='3'>{{cart.total }} F CFA</td>          
+  
+                  </tr>
+              </tbody>
+          </table>
+    </div>
+  </div>
+
+  </div>
+
+   {% endblock %}
+
+    

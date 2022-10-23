@@ -1,4 +1,3 @@
-from multiprocessing import context
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
@@ -52,6 +51,8 @@ class  AddToCartView(TemplateView):
         product_id=self.kwargs['id']
         product=Product.objects.get(id=product_id) # let's retrieve the product
         
+        print(f'{product_id} ***********id***********************')
+
         #retrive cart_id
         cart_id=self.request.session.get("cart_id",None)    # Retrive the cart id
         
@@ -78,14 +79,15 @@ class  AddToCartView(TemplateView):
                     subtotal = product.selling_price
                     ) 
                 
-                cartproduct.save()
+                #cartproduct.save()
                 cart_obj.total += product.selling_price
+                print(f'{cart_obj.total} ***********prix***********************')
                 cart_obj.save()
                 
         #if Cart doesn't exists
         else :
             cart_obj = Cart.objects.create(total=0)
-            cart_id = self.request.session.get("cart_id")
+            self.request.session["cart_id"]=cart_obj.id  #Obligatoire de modifier la session
             cartproduct = CartProduct.objects.create(
                     cart=cart_obj,
                     product=product,
@@ -94,9 +96,31 @@ class  AddToCartView(TemplateView):
                     subtotal = product.selling_price
                     ) 
                 
-            cartproduct.save()
+            #cartproduct.save()
             cart_obj.total += product.selling_price
             cart_obj.save()
 
+            context['cartproduct']=cartproduct
+            context['message']="Added successfully !"
+            
         return context
     
+    
+class CartContentView(TemplateView):
+    template_name="cart_content.html"
+    
+    def get_context_data(self, **kwargs):
+        context= super().get_context_data(**kwargs)
+        cart_id=self.request.session.get("cart_id",None)
+        print(f'{cart_id} **********ID CART***********************')
+
+        
+        if cart_id:
+            cart = Cart.objects.get(id=cart_id)
+        else :
+            cart = None 
+        context['cart']=cart  
+        print(f'{cart} **********CART***********************')
+          
+        return context
+        
