@@ -1,7 +1,11 @@
 from django.shortcuts import render,redirect
-from django.views.generic import TemplateView,View
+from django.views.generic import TemplateView,View, CreateView #We can use FormModel instead of CreateView
 
 from .models import *
+
+from .forms import CheckoutForm
+
+from django.urls import reverse_lazy
 
 
 #Home view
@@ -177,4 +181,23 @@ class EmptyCartView(View):
         
         return redirect("ecommerceApp:empty-cart")
     
+    
+class CheckoutView(CreateView):
+    template_name =  "checkout.html"
+    form_class = CheckoutForm
+    success_url = reverse_lazy('ecommerceApp:home')  # success_url --> keyWord
+    
+    def get_context_data(self, **kwargs) :
+        context = super().get_context_data(**kwargs)
+        cart_id = self.request.session.get("cart_id",None)
+        
+        if cart_id:
+            cart = Cart.objects.get(id=cart_id)
+        else:
+            cart = None
+        context['cart'] = cart 
+        return context
+        
+           
+       
         

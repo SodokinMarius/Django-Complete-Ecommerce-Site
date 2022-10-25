@@ -11,6 +11,7 @@ from .views import (
     CartContentView,
     CartManageView,
     EmptyCartView,
+    CheckoutView,
 )
 
 app_name="ecommerceApp"
@@ -24,5 +25,6 @@ urlpatterns = [
     path("cart-content/",CartContentView.as_view(),name="cart-content"),
     path("cart-manage/<int:cartproduct_id>/",CartManageView.as_view(),name="cart-manage"),
     path("empty-cart/",EmptyCartView.as_view(),name='empty-cart'),
+    path("checkout/",CheckoutView.as_view(),name='checkout'),
 
 ]
