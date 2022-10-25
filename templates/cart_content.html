@@ -36,20 +36,20 @@
                   <td>{{cart_product.quantity}}</td>
                   <td>{{cart_product.subtotal}} F CFA </td>
                   <td> 
-
-                    <a href="" class="btn btn-primary"><i class="fa fa-plus"></i></a>
-                    <a href="" class="btn btn-warning text-light"><i class="fa fa-minus"></i></a>
-                    <a href="" class="btn btn-danger fw-bolder">x</a>
+                    <a href="{% url 'ecommerceApp:cart-manage' cart_product.id %}?action=increase" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                    <a href="{% url 'ecommerceApp:cart-manage' cart_product.id %}?action=decrease" class="btn btn-warning text-light"><i class="fa fa-minus"></i></a>
+                    <a href="{% url 'ecommerceApp:cart-manage' cart_product.id %}?action=delete" class="btn btn-danger fw-bolder">x</a>
                 </td>
 
                 </tr>
                
                 {% endfor %}
-                 
                 <tr>
-                    <td colspan='3' class='text-end'>Total  :</td>
-                    <td class="fs-3 fw-bold text-primary"  colspan='3'>{{cart.total }} F CFA</td>          
-  
+                    <th colspan='2' class='text-end'>Total  :</th>
+                    <th class="fs-3 fw-bold text-primary"  colspan='3'>{{cart.total }} F CFA</th> 
+                    {% if cart.cartproduct_set.all %}
+                    <th class="fs-3 fw-bold text-light" colspan='2'> <a href="{% url 'ecommerceApp:empty-cart' %}" class="btn btn-dark">Vider Carte</a> </th>   
+                  {% endif %}     
                   </tr>
               </tbody>
           </table>

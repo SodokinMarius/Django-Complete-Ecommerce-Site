@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.shortcuts import render,redirect
+from django.views.generic import TemplateView,View
 
 from .models import *
 
@@ -123,4 +123,58 @@ class CartContentView(TemplateView):
         print(f'{cart} **********CART***********************')
           
         return context
+    
+class CartManageView(View):
+    def get(self, request,*args,**kargs):
+        cartproduct_id = self.kwargs['cartproduct_id']
+        action = request.GET.get("action")
+        cartproduct_obj = CartProduct.objects.get(id=cartproduct_id)
+        cart_for_product =  cartproduct_obj.cart
+        
+        '''cart_id_in_session = self.request.session.get("cart_id",None)
+        if cart_id_in_session:
+            cart_obj_in_session = Cart.objects.get(id=cart_id_in_session)'''
+        
+        if action == 'increase':
+            cartproduct_obj.quantity += 1
+            cartproduct_obj.subtotal +=  cartproduct_obj.rate
+            cartproduct_obj.save()
+            
+            cart_for_product.total += cartproduct_obj.rate
+            cart_for_product.save()
+                       
+        elif action == 'decrease':
+            cartproduct_obj.quantity -= 1
+            cartproduct_obj.subtotal -=  cartproduct_obj.rate
+            cartproduct_obj.save()
+            
+            cart_for_product.total -= cartproduct_obj.rate
+            cart_for_product.save()
+            
+            # Si la quantité est nulle après diminution, on le supprime
+            if cartproduct_obj.quantity == 0 :
+                cart_for_product.delete()
+             
+        elif action == 'delete' :
+            cart_for_product.total -= cartproduct_obj.subtotal
+            cart_for_product.save()
+            cartproduct_obj.delete()
+            
+        else :
+            pass
+        return redirect('ecommerceApp:cart-content')
+    
+
+class EmptyCartView(View):
+    def get(self, request,*args,**kwargs):
+        
+        cart_id = self.request.session.get('cart_id')
+        if cart_id :
+            cart = Cart.objects.get(id=cart_id)
+            cart.cartproduct_set.all().delete()
+            cart.total = 0
+            cart.save()            
+        
+        return redirect("ecommerceApp:empty-cart")
+    
         
