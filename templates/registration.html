@@ -17,7 +17,6 @@
             {% csrf_token %}
             {{form.as_p}}
          <button type="submit" class ="btn btn-primary"> S'inscrire </button>
-         customer-login
         </form>
 
         <p>Avez vous déjà un compte ? <a href="{% url 'ecommerceApp:customer-login' %}"> Se connecter</a> </p>

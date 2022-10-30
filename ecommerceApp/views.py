@@ -229,9 +229,9 @@ class RegistrationView(CreateView):
         email = form.cleaned_data.get('email')
         
         user = User.objects.create_user(username=username,password=password,email=email)
-        
+       
         form.instance.user = user
-
+        login(self.request,user)
         return super().form_valid(form)
     
 
@@ -247,6 +247,7 @@ class CustomerLoginView(FormView):
         user_in_connexion = authenticate(username = username, password = password)
         
         if user_in_connexion is not None and user_in_connexion.customer :
+            self.request.session['user'] = user_in_connexion
             login(
                 self.request,
                 user_in_connexion
@@ -254,6 +255,13 @@ class CustomerLoginView(FormView):
         else :
             return render(self.request, self.template_name, context = {'form': self.form_class, 'errors' : "Identififiants incorrects" })
         return super().form_valid(form)
+
+
+class CustomerLogoutView(View):
+    def get(self,*args, **kwargs) :
+        logout(self.request)
+        
+        return redirect('ecommerceApp:home')
     
         
            
