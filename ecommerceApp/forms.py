@@ -1,6 +1,5 @@
 from dataclasses import fields
-from tabnanny import verbose
-from xml.dom import ValidationErr
+from django.core.exceptions import ValidationError
 from django import forms
 from .models import Order, Customer
 from django.contrib.auth.models import User
@@ -24,11 +23,16 @@ class RegistrationForm(forms.ModelForm):
     def clean_username(self) :
         username = self.cleaned_data['username']
         if User.objects.filter(username=username).exists():
-            raise ValidationErr(
+            raise ValidationError(
                 'This user alredy exists !!'
             )
         return username
     
+
+class CustomerLoginForm(forms.Form):
+    username = forms.CharField(max_length=200,widget=forms.TextInput())
+    password = forms.CharField(widget=forms.PasswordInput())
+   
     
    
     

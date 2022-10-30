@@ -13,6 +13,7 @@ from .views import (
     EmptyCartView,
     CheckoutView,
     RegistrationView,
+    CustomerLoginView,
 )
 
 app_name="ecommerceApp"
@@ -28,5 +29,7 @@ urlpatterns = [
     path("empty-cart/",EmptyCartView.as_view(),name='empty-cart'),
     path("checkout/",CheckoutView.as_view(),name='checkout'),
     path("registration/",RegistrationView.as_view(),name='customer-registration'),
+    path("customer-login/",CustomerLoginView.as_view(),name='customer-login'),
+
 
 ]

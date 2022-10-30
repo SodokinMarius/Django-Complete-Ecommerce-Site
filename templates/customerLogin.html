@@ -7,20 +7,23 @@
 
   {% block content %}
 
-  <h1 class=" p-5 text-center border-b-2">Formulaire d'Inscription Client</h1>
+  <h1 class=" p-5 text-center border-b-2">Connexion</h1>
   <div class="container">
     
    <div class="row">
     
     <div class="col-sm-12 col-md-8 mx-auto" >
         <form action="" method="POST">
+           {% if errors %}
+           <p>{{errors}}</p>
+           {% endif %}
+                      
             {% csrf_token %}
             {{form.as_p}}
-         <button type="submit" class ="btn btn-primary"> S'inscrire </button>
-         customer-login
+         <button type="submit" class ="btn btn-primary"> Se connecter </button>
         </form>
 
-        <p>Avez vous déjà un compte ? <a href="{% url 'ecommerceApp:customer-login' %}"> Se connecter</a> </p>
+        <p> Vous n'avez pas encore de compte ? <a href="{% url 'ecommerceApp:customer-registration' %}"> S'inscrire </a> </p>
 
     </div>
 

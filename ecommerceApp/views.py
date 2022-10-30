@@ -1,12 +1,13 @@
 from django.shortcuts import render,redirect
-from django.views.generic import TemplateView,View, CreateView #We can use FormModel instead of CreateView
+from django.views.generic import TemplateView,View, CreateView,FormView #We can use FormModel instead of CreateView
 
 from .models import *
 from django.contrib.auth.models import User
 
-from .forms import CheckoutForm,RegistrationForm
+from .forms import CheckoutForm,RegistrationForm,CustomerLoginForm
 
 from django.urls import reverse_lazy
+from django.contrib.auth import authenticate,login,logout
 
 
 #Home view
@@ -231,6 +232,27 @@ class RegistrationView(CreateView):
         
         form.instance.user = user
 
+        return super().form_valid(form)
+    
+
+class CustomerLoginView(FormView):
+    template_name = "customerLogin.html"
+    form_class = CustomerLoginForm
+    success_url = reverse_lazy('ecommerceApp:home')
+    
+    def form_valid(self,form):
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+        
+        user_in_connexion = authenticate(username = username, password = password)
+        
+        if user_in_connexion is not None and user_in_connexion.customer :
+            login(
+                self.request,
+                user_in_connexion
+            )
+        else :
+            return render(self.request, self.template_name, context = {'form': self.form_class, 'errors' : "Identififiants incorrects" })
         return super().form_valid(form)
     
         
