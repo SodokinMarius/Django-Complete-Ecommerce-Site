@@ -1,6 +1,9 @@
 from dataclasses import fields
+from tabnanny import verbose
+from xml.dom import ValidationErr
 from django import forms
-from .models import Order 
+from .models import Order, Customer
+from django.contrib.auth.models import User
 
 class CheckoutForm(forms.ModelForm):
     
@@ -8,6 +11,24 @@ class CheckoutForm(forms.ModelForm):
         model = Order 
         fields = ['ordered_by','shipping_adress','mobile','email','order_status']
     
+
+class RegistrationForm(forms.ModelForm):
+    username = forms.CharField(max_length=200,widget=forms.TextInput())
+    password = forms.CharField(widget=forms.PasswordInput())
+    email =  forms.CharField(widget=forms.TextInput())
     
-     
+    class Meta :
+        model = Customer
+        fields = ["username","password","email","full_name","telephone","adresse"]
+    
+    def clean_username(self) :
+        username = self.cleaned_data['username']
+        if User.objects.filter(username=username).exists():
+            raise ValidationErr(
+                'This user alredy exists !!'
+            )
+        return username
+    
+    
+   
     

@@ -2,8 +2,9 @@ from django.shortcuts import render,redirect
 from django.views.generic import TemplateView,View, CreateView #We can use FormModel instead of CreateView
 
 from .models import *
+from django.contrib.auth.models import User
 
-from .forms import CheckoutForm
+from .forms import CheckoutForm,RegistrationForm
 
 from django.urls import reverse_lazy
 
@@ -214,7 +215,23 @@ class CheckoutView(CreateView):
         else :
             redirect("ecommerceApp:home")                
         return super().form_valid(form)
+
+
+class RegistrationView(CreateView):
+    template_name = "registration.html"
+    form_class = RegistrationForm
+    success_url = reverse_lazy('ecommerceApp:home')
     
+    def form_valid(self, form) :        
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+        email = form.cleaned_data.get('email')
+        
+        user = User.objects.create_user(username=username,password=password,email=email)
+        
+        form.instance.user = user
+
+        return super().form_valid(form)
     
         
            
