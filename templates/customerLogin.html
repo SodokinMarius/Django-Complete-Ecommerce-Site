@@ -17,13 +17,14 @@
            {% if errors %}
            <p>{{errors}}</p>
            {% endif %}
-                      
+
             {% csrf_token %}
             {{form.as_p}}
          <button type="submit" class ="btn btn-primary"> Se connecter </button>
         </form>
 
-        <p> Vous n'avez pas encore de compte ? <a href="{% url 'ecommerceApp:customer-registration' %}"> S'inscrire </a> </p>
+        <p> Vous n'avez pas encore de compte ? <a href="{% url 'ecommerceApp:customer-registration' %}
+            {% if request.GET.next %}next={{ request.GET.next}}{% endif %}"> S'inscrire </a> </p>
 
     </div>
 

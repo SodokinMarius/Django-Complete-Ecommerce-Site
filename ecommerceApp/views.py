@@ -10,8 +10,22 @@ from django.urls import reverse_lazy
 from django.contrib.auth import authenticate,login,logout
 
 
+#Let's assign the cart to a customer
+class EcommerceMixin(object):
+    def get_context_data(self, **kwargs):        
+        cart_id = self.request.session.get("cart_id")
+        
+        if cart_id : 
+            cart = Cart.objects.get(id=cart_id)
+            if self.request.user.is_authenticated and self.request.user.customer :
+                cart.customer = self.request.user
+                cart.save()
+        return super().get_context_data(**kwargs)
+        
+       
+    
 #Home view
-class HomeView(TemplateView):
+class HomeView(TemplateView,EcommerceMixin):
     template_name="home.html"
     
     def get_context_data(self, **kwargs):
@@ -20,15 +34,15 @@ class HomeView(TemplateView):
         return  context
    
 
-class AboutView(TemplateView):
+class AboutView(TemplateView,EcommerceMixin):
     template_name = "about.html"
 
 
-class ContactView(TemplateView):
+class ContactView(TemplateView,EcommerceMixin):
     template_name = "contact.html"
 
 
-class ProductsView(TemplateView):
+class ProductsView(TemplateView,EcommerceMixin):
     template_name="produits.html"
     
     def get_context_data(self, **kwargs):
@@ -36,7 +50,7 @@ class ProductsView(TemplateView):
         context['categories']=Category.objects.all().order_by('title')
         return  context
 
-class ProductDetailView(TemplateView):
+class ProductDetailView(TemplateView,EcommerceMixin):
     template_name="product-detail.html"
     
     def get_context_data(self,**kwargs):
@@ -49,7 +63,7 @@ class ProductDetailView(TemplateView):
         return  context
 
   
-class  AddToCartView(TemplateView):
+class  AddToCartView(TemplateView,EcommerceMixin):
     template_name="add_to_cart.html"
         
     def get_context_data(self, **kwargs):
@@ -112,7 +126,7 @@ class  AddToCartView(TemplateView):
         return context
     
     
-class CartContentView(TemplateView):
+class CartContentView(TemplateView,EcommerceMixin):
     template_name="cart_content.html"
     
     def get_context_data(self, **kwargs):
@@ -130,7 +144,7 @@ class CartContentView(TemplateView):
           
         return context
     
-class CartManageView(View):
+class CartManageView(View,EcommerceMixin):
     def get(self, request,*args,**kargs):
         cartproduct_id = self.kwargs['cartproduct_id']
         action = request.GET.get("action")
@@ -171,7 +185,7 @@ class CartManageView(View):
         return redirect('ecommerceApp:cart-content')
     
 
-class EmptyCartView(View):
+class EmptyCartView(View,EcommerceMixin):
     def get(self, request,*args,**kwargs):
         
         cart_id = self.request.session.get('cart_id')
@@ -184,10 +198,19 @@ class EmptyCartView(View):
         return redirect("ecommerceApp:empty-cart")
     
     
-class CheckoutView(CreateView):
+class CheckoutView(CreateView,EcommerceMixin):
     template_name =  "checkout.html"
     form_class = CheckoutForm
     success_url = reverse_lazy('ecommerceApp:home')  # success_url --> keyWord
+    
+    def dispatch(self, request, *args, **kwargs) :
+        if request.user.is_authenticated and request.user.customer: #si le user est authentifié et est un client
+            pass
+        else :
+            return redirect("/customer-login/?next=/checkout/")
+            
+        return super().dispatch(request, *args, **kwargs)
+    
     
     def get_context_data(self, **kwargs) :
         context = super().get_context_data(**kwargs)
@@ -214,7 +237,7 @@ class CheckoutView(CreateView):
             form.instance.order_status = "Order Received"
             del self.request.session["cart_id"]  #Supprimer le panier de la session
         else :
-            redirect("ecommerceApp:home")                
+           return redirect("ecommerceApp:home")                
         return super().form_valid(form)
 
 
@@ -255,6 +278,15 @@ class CustomerLoginView(FormView):
         else :
             return render(self.request, self.template_name, context = {'form': self.form_class, 'errors' : "Identififiants incorrects" })
         return super().form_valid(form)
+    
+    #Manage the redirect URL after logging in to checkout
+    def get_success_url(self) :
+        if "next" in self.request.GET :
+            next_url = self.request.GET.get("next")
+            print("netx url "+str(next_url))
+            return next_url            
+        else :
+            return self.success_url 
 
 
 class CustomerLogoutView(View):
