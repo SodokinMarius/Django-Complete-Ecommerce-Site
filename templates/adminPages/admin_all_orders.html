@@ -1,0 +1,62 @@
+
+{% extends 'adminPages/admin_base.html' %}
+
+{% block title %}
+  Admin Home
+{% endblock %}
+
+  {% block content %}
+
+  <div class="container">
+
+   <div class="row">
+    
+    <div class="col-sm-12 col-md-8 mx-auto">
+        <h2 class=" p-2 text-center border-b-2 ">Liste de toutes les commandes</h2> 
+        
+        <table class="table table-secondary table-hover">
+              <thead>
+                <tr>                                     
+                  <th scope="col">ID</th>
+                  <th scope="col">Auteur</th>
+                  <th scope="col">Adresse de Livraison</th>
+                  <th scope="col">Télephone</th>
+                  <th scope="col">Sous Total</th>
+                  <th scope="col">Reduction</th>
+                  <th scope="col">Total</th>
+                  <th scope="col">Statut de la commande</th>
+                  <th scope="col">Date de création</th>
+                </tr>
+             
+              </thead>
+              <tbody>
+
+                {% for order in  orders %}
+                <tr>
+            <a href="{% url 'ecommerceApp:admin-order-detail' order.pk %}">   
+                  <th scope="row">{{ order.id }}</th> </a> 
+                  <td>{{order.ordered_by}}</td>
+                  <td>{{order.shipping_adress }}</td>
+                  <td>{{order.mobile}}</td>
+                  <td>{{order.subtotal}} F CFA </td>
+                  <td>{{order.discount}} F CFA</td>
+                  <td>{{order.total }} F CFA</td>
+                  <td>{{order.order_status}}</td>
+                  <td>{{order.created_at }} <span class="text-primary">({{order.created_at|timesince }} ) <span></td>                
+                </tr>  
+            
+              {% endfor %}            
+              
+              </tbody>
+          </table>
+
+  </div>
+  
+  </div>
+
+  {% endblock %}
+
+        
+
+
+

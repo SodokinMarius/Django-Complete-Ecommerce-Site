@@ -14,6 +14,9 @@ class Admin(models.Model):
     telephone = models.CharField(max_length=30)
     profile_photo = models.ImageField(upload_to="Admins")
     
+    def __str__(self) :
+        return self.full_name
+    
 class Customer(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     full_name = models.CharField(max_length=300)

@@ -17,6 +17,10 @@ from .views import (
     CustomerLogoutView,
     CustomerProfileView,
     CustomerOrderDetailView,
+    AdminLoginView,
+    AdminHomeView,
+    AdminAllOrderView,
+    AdminOrderDetailView,    
 )
 
 app_name="ecommerceApp"
@@ -36,8 +40,8 @@ urlpatterns = [
     path("customer-logout/",CustomerLogoutView.as_view(),name='customer-logout'),
     path("customer-profile/",CustomerProfileView.as_view(),name='customer-profile'),
     path("customer-order-detail/<int:pk>/",CustomerOrderDetailView.as_view(),name='customer-order-detail'),
-
-
-
-
+    path("admin-login/",AdminLoginView.as_view(),name='admin-login'),
+    path("admin-home/",AdminHomeView.as_view(),name='admin-home'),
+    path("admin-all-order/",AdminAllOrderView.as_view(),name='admin-all-order'),
+    path("admin-order-detail/<int:pk>/",AdminOrderDetailView.as_view(),name='admin-order-detail'),
 ]

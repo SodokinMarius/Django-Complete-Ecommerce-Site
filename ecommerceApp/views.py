@@ -1,6 +1,6 @@
-from ast import Or
+
 from django.shortcuts import render,redirect
-from django.views.generic import TemplateView,View, CreateView,FormView,DetailView #We can use FormModel instead of CreateView
+from django.views.generic import TemplateView,View, CreateView,FormView,DetailView,ListView #We can use FormModel instead of CreateView
 
 from .models import *
 from django.contrib.auth.models import User
@@ -13,16 +13,14 @@ from django.contrib.auth import authenticate,login,logout
 
 #Let's assign the cart to a customer
 class EcommerceMixin(object):
-    def get_context_data(self, **kwargs):        
-        cart_id = self.request.session.get("cart_id")
-        
-        if cart_id : 
-            cart = Cart.objects.get(id=cart_id)
-            if self.request.user.is_authenticated and self.request.user.customer :
-                cart.customer = self.request.user
-                cart.save()
-        return super().get_context_data(**kwargs)
-        
+    def dispatch(self, request, *args, **kwargs):
+        cart_id = request.session.get("cart_id")
+        if cart_id:
+            cart_obj = Cart.objects.get(id=cart_id)
+            if request.user.is_authenticated and Customer.objects.filter(user=request.user).exists():
+                cart_obj.customer = request.user.customer
+                cart_obj.save()
+        return super().dispatch(request, *args, **kwargs)        
        
     
 #Home view
@@ -333,8 +331,59 @@ class CustomerOrderDetailView(DetailView):
         else:
             return redirect("/customer-login/?next=/customer-profile/")
         return super().dispatch(request, *args, **kwargs)
+
+
+#=============================== ADMIN VIEWS ===================================
+class AdminRequiredMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and Admin.objects.filter(user=request.user).exists():
+            pass 
+        else:
+            return redirect("/admin-login/")
+        return super().dispatch(request, *args, **kwargs)
     
     
+class AdminLoginView(FormView,AdminRequiredMixin):
+    template_name = "adminPages/admin_login.html"
+    form_class = CustomerLoginForm
+    success_url = reverse_lazy('ecommerceApp:admin-home')
+    
+    def form_valid(self,form):
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+        
+        user_in_connexion = authenticate(username = username, password = password)
+        
+        if user_in_connexion is not None and Admin.objects.filter(user=user_in_connexion).exists() :
+            login(
+                self.request,
+                user_in_connexion
+            )
+        else :
+            return render(self.request, self.template_name, context = {'form': self.form_class, 'errors' : "Identififiants incorrects" })
+        return super().form_valid(form)
+    
+class AdminHomeView(TemplateView,AdminRequiredMixin) :
+    template_name = "adminPages/admin_home.html"
+       
+    def get_context_data(self, **kwargs) :
+        context = super().get_context_data(**kwargs)
+        placed_orders = Order.objects.filter(order_status="Order Received")
+        context['placed_orders'] = placed_orders 
+        return context
+        
+    
+    
+class AdminAllOrderView(ListView,AdminRequiredMixin):
+    template_name = "admin_all_orders.html"
+    queryset = Order.objects.all().order_by('id')
+    context_object_name = "orders"
+    
+    
+class AdminOrderDetailView(DetailView,AdminRequiredMixin):
+    template_name = "admin_order_detail.html"
+    model = Order
+    context_object_name = "order"
     
     
            
