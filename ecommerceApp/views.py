@@ -1,5 +1,6 @@
+from ast import Or
 from django.shortcuts import render,redirect
-from django.views.generic import TemplateView,View, CreateView,FormView #We can use FormModel instead of CreateView
+from django.views.generic import TemplateView,View, CreateView,FormView,DetailView #We can use FormModel instead of CreateView
 
 from .models import *
 from django.contrib.auth.models import User
@@ -314,6 +315,12 @@ class CustomerProfileView(TemplateView,EcommerceMixin):
         context['customer'] = customer
         context['orders'] = orders
         return context
+
+class CustomerOrderDetailView(DetailView,EcommerceMixin):
+    template_name = "customer-order-detail.html" 
+    model = Order
+    context_object_name = 'order'
+    
     
            
        

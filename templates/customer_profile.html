@@ -29,7 +29,8 @@
         
         <table class="table table-secondary table-hover">
               <thead>
-                <tr>                    
+                <tr> 
+                                    
                   <th scope="col">ID</th>
                   <th scope="col">Auteur</th>
                   <th scope="col">Adresse de Livraison</th>
@@ -40,10 +41,12 @@
                   <th scope="col">Statut de la commande</th>
                   <th scope="col">Date de création</th>
                 </tr>
+             
               </thead>
               <tbody>
 
                 {% for order in  orders %}
+                <a href="{% url 'ecommerceApp:customer-order-detail' order.pk %}"> 
                 <tr>
                   <th scope="row">{{ order.id }}</th>
                   <td>{{order.ordered_by}}</td>
@@ -55,7 +58,8 @@
                   <td>{{order.order_status}}</td>
                   <td>{{order.created_at }} F CFA </td>
                 
-                </tr>               
+                </tr>  
+              </a>             
                 {% endfor %}
                 <tr>
                     <th colspan='2' class='text-end'>Total  :</th>
