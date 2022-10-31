@@ -375,13 +375,13 @@ class AdminHomeView(TemplateView,AdminRequiredMixin) :
     
     
 class AdminAllOrderView(ListView,AdminRequiredMixin):
-    template_name = "admin_all_orders.html"
+    template_name = "adminPages/admin_all_orders.html"
     queryset = Order.objects.all().order_by('id')
     context_object_name = "orders"
     
     
 class AdminOrderDetailView(DetailView,AdminRequiredMixin):
-    template_name = "admin_order_detail.html"
+    template_name = "adminPages/admin_order_detail.html"
     model = Order
     context_object_name = "order"
     

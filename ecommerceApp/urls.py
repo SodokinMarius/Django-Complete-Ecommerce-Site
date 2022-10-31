@@ -21,7 +21,7 @@ from .views import (
     AdminHomeView,
     AdminAllOrderView,
     AdminOrderDetailView,    
-)
+    )
 
 app_name="ecommerceApp"
 urlpatterns = [
@@ -44,4 +44,5 @@ urlpatterns = [
     path("admin-home/",AdminHomeView.as_view(),name='admin-home'),
     path("admin-all-order/",AdminAllOrderView.as_view(),name='admin-all-order'),
     path("admin-order-detail/<int:pk>/",AdminOrderDetailView.as_view(),name='admin-order-detail'),
+
 ]
