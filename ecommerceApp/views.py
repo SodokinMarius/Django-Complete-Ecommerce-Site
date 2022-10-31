@@ -204,7 +204,7 @@ class CheckoutView(CreateView,EcommerceMixin):
     success_url = reverse_lazy('ecommerceApp:home')  # success_url --> keyWord
     
     def dispatch(self, request, *args, **kwargs) :
-        if request.user.is_authenticated and request.user.customer: #si le user est authentifié et est un client
+        if request.user.is_authenticated and Customer.objects.filter(user=request.user).exists(): #si le user est authentifié et est un client
             pass
         else :
             return redirect("/customer-login/?next=/checkout/")
@@ -269,8 +269,7 @@ class CustomerLoginView(FormView):
         
         user_in_connexion = authenticate(username = username, password = password)
         
-        if user_in_connexion is not None and user_in_connexion.customer :
-            self.request.session['user'] = user_in_connexion
+        if user_in_connexion is not None and Customer.objects.filter(user=user_in_connexion).exists() :
             login(
                 self.request,
                 user_in_connexion
@@ -280,13 +279,13 @@ class CustomerLoginView(FormView):
         return super().form_valid(form)
     
     #Manage the redirect URL after logging in to checkout
-    def get_success_url(self) :
-        if "next" in self.request.GET :
+    def get_success_url(self):
+        if "next" in self.request.GET:
             next_url = self.request.GET.get("next")
-            print("netx url "+str(next_url))
-            return next_url            
-        else :
-            return self.success_url 
+            return next_url
+        else:
+            return self.success_url
+
 
 
 class CustomerLogoutView(View):
@@ -295,7 +294,27 @@ class CustomerLogoutView(View):
         
         return redirect('ecommerceApp:home')
     
-        
+
+class CustomerProfileView(TemplateView,EcommerceMixin):
+    template_name =  "customer_profile.html"
+   
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and Customer.objects.filter(user=request.user).exists():
+            pass
+        else:
+            return redirect("/customer-login/?next=/customer-profile/")
+        return super().dispatch(request, *args, **kwargs)
+
+    
+    def get_context_data(self, **kwargs) :
+        context = super().get_context_data(**kwargs)
+        customer = self.request.user.customer
+        orders = Order.objects.filter(cart__customer=customer)
+        print("Nombre de commande : "+ str(orders.count()))
+        context['customer'] = customer
+        context['orders'] = orders
+        return context
+    
            
        
         

@@ -1,0 +1,76 @@
+
+{% extends 'base.html' %}
+
+{% block title %}
+ My Profile
+{% endblock %}
+
+  {% block content %}
+
+  <h1 class=" p-3 text-center border-b-2"></h1>
+  <div class="container">
+    
+   <div class="row">
+    
+    <div class="col-sm-12 col-md-4">
+        <h2 class=" p-5 text-center border-b-2 ">Detail Informations</h2> <hr>
+        
+        <p> <span>Username : </span>{{customer.user.username}}</p>
+        <p> <span>Email : </span>{{customer.user.email}}</p>
+        <p> <span>Nom complet : </span>{{customer.full_name}}</p>
+        <p> <span>Adresse: </span>{{customer.adresse}}</p>
+        <p> <span>Telephone : </span>{{customer.telephone}}</p>
+        <p> <span>Date d'inscription : </span>{{customer.joined_on | timesince}}</p>
+                
+    </div>
+
+    <div class="col-sm-12 col-md-8">
+        <h2 class=" p-5 text-center border-b-2 ">Mes commandes effectuées</h2> 
+        
+        <table class="table table-secondary table-hover">
+              <thead>
+                <tr>                    
+                  <th scope="col">ID</th>
+                  <th scope="col">Auteur</th>
+                  <th scope="col">Adresse de Livraison</th>
+                  <th scope="col">Télephone</th>
+                  <th scope="col">Sous Total</th>
+                  <th scope="col">Reduction</th>
+                  <th scope="col">Total</th>
+                  <th scope="col">Statut de la commande</th>
+                  <th scope="col">Date de création</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                {% for order in  orders %}
+                <tr>
+                  <th scope="row">{{ order.id }}</th>
+                  <td>{{order.ordered_by}}</td>
+                  <td>{{order.shipping_adress }} F CFA</td>
+                  <td>{{order.mobile}}</td>
+                  <td>{{order.subtotal}} F CFA </td>
+                  <td>{{order.discount}} F CFA</td>
+                  <td>{{order.total }} F CFA</td>
+                  <td>{{order.order_status}}</td>
+                  <td>{{order.created_at }} F CFA </td>
+                
+                </tr>               
+                {% endfor %}
+                <tr>
+                    <th colspan='2' class='text-end'>Total  :</th>
+                    <th class="fs-3 fw-bold text-primary"  colspan='3'>{{cart.total }} F CFA</th> 
+                    {% if cart.cartproduct_set.all %}
+                  <th class="fs-3 fw-bold text-light" colspan='2'> <a href="{% url 'ecommerceApp:empty-cart' %}" class="btn btn-dark">Vider Carte</a> </th>   
+                  {% endif %}     
+                  </tr>
+              </tbody>
+          </table>
+
+  </div>
+
+  </div>
+
+   {% endblock %}
+
+    

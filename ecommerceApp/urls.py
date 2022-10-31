@@ -15,6 +15,7 @@ from .views import (
     RegistrationView,
     CustomerLoginView,
     CustomerLogoutView,
+    CustomerProfileView,
 )
 
 app_name="ecommerceApp"
@@ -32,6 +33,8 @@ urlpatterns = [
     path("registration/",RegistrationView.as_view(),name='customer-registration'),
     path("customer-login/",CustomerLoginView.as_view(),name='customer-login'),
     path("customer-logout/",CustomerLogoutView.as_view(),name='customer-logout'),
+    path("customer-profile/",CustomerProfileView.as_view(),name='customer-profile'),
+
 
 
 
