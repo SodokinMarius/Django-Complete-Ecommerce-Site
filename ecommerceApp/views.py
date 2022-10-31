@@ -316,10 +316,25 @@ class CustomerProfileView(TemplateView,EcommerceMixin):
         context['orders'] = orders
         return context
 
-class CustomerOrderDetailView(DetailView,EcommerceMixin):
+class CustomerOrderDetailView(DetailView):
     template_name = "customer-order-detail.html" 
     model = Order
     context_object_name = 'order'
+    
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and Customer.objects.filter(user=request.user).exists():
+            order_id = self.kwargs["pk"]
+            order = Order.objects.get(id=order_id)
+            
+            #verifions si la commande demandée est effectueé par le client en cours
+            current_customer = Order.cart.customer
+            if self.request.user.customer != current_customer :
+                return redirect("ecommerceApp:customer-profile")
+        else:
+            return redirect("/customer-login/?next=/customer-profile/")
+        return super().dispatch(request, *args, **kwargs)
+    
+    
     
     
            
