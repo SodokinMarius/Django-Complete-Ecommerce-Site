@@ -34,9 +34,9 @@
 
                 {% for order in  placed_orders %}
                 <tr>
-            <a href="{% url 'ecommerceApp:admin-order-detail' order.pk %}">   
 
-                  <th scope="row">{{ order.id }}</th> </a> 
+                  <th scope="row"> <a href="{% url 'ecommerceApp:admin-order-detail' order.pk %}">   
+                    {{ order.id }} </a> </th>
                   <td>{{order.ordered_by}}</td>
                   <td>{{order.shipping_adress }}</td>
                   <td>{{order.mobile}}</td>

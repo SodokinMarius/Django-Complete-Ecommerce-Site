@@ -385,6 +385,21 @@ class AdminOrderDetailView(DetailView,AdminRequiredMixin):
     model = Order
     context_object_name = "order"
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['orders_status'] = STATUS_CHOICES
+        return context
+    
+
+class AdminOrderStatusChangeView(View,AdminRequiredMixin):
+    def post(self,request, *args,**kwargs):
+        order_id = self.kwargs["pk"]
+        
+        order = Order.objects.get (id=order_id)
+        order_status = request.POST.get("status")
+        order.order_status = order_status
+        order.save()
+        return redirect(reverse_lazy("ecommerceApp:admin-order-change",kwargs = {"pk": order_id}))
     
            
        

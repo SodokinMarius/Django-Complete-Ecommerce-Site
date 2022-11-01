@@ -20,7 +20,8 @@ from .views import (
     AdminLoginView,
     AdminHomeView,
     AdminAllOrderView,
-    AdminOrderDetailView,    
+    AdminOrderDetailView, 
+    AdminOrderStatusChangeView   
     )
 
 app_name="ecommerceApp"
@@ -44,5 +45,6 @@ urlpatterns = [
     path("admin-home/",AdminHomeView.as_view(),name='admin-home'),
     path("admin-all-order/",AdminAllOrderView.as_view(),name='admin-all-order'),
     path("admin-order-detail/<int:pk>/",AdminOrderDetailView.as_view(),name='admin-order-detail'),
+    path("admin-order/<int:pk>/change",AdminOrderStatusChangeView.as_view(),name='admin-order-change'),
 
 ]

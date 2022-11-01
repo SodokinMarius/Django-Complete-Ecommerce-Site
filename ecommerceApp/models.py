@@ -64,8 +64,7 @@ class CartProduct(models.Model):
     rate =  models.PositiveIntegerField()
     quantity = models.PositiveIntegerField()
     subtotal = models.PositiveBigIntegerField()
-    
-      
+          
     def __str__(self):
         return "Cart : "+str(self.id)+" Product : "+str(self.product.id)+" CardProduct : "+str(self.id)
     

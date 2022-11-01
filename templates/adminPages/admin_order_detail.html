@@ -1,0 +1,100 @@
+
+{% extends 'adminPages/admin_base.html' %}
+
+{% block title %}
+  Order-{{order.id }} 
+{% endblock %}
+
+  {% block content %}
+
+  <div class="container">
+
+   <div class="row">
+    
+    <div class="col-sm-12 col-md-6 mx-auto">
+        <h2 class=" p-2 text-center border-b-2 ">Commande N° {{order.id}}</h2> 
+        
+                                         
+    <p> ID  : <span>{{order.id}}</span></p>
+    <p> Auteur : <span>{{order.ordered_by}}</span></p>
+    <p>Adresse de Livraison : <span>{{order.shipping_adress }}</span> </p>
+    <p>Télephone : <span>{{order.mobile}}</span> </p>
+    <p>Sous Total :  <span>{{order.subtotal}}</span> </p>
+    <p>Reduction : <span>{{order.discount}}</span> </p>
+    <p> Total  : <span>{{order.total}}</span></p>
+    <p>Statut de la commande :  <span>{{order.order_status}}</span></p>
+    <p> Date de création : <span>{{order.created_at}}</span> </p>
+               
+     
+  </div>
+
+  <div class="col-sm-12 col-md-6">
+    <h2 class=" p-5 text-center border-b-2 ">Contenu de la commande</h2> 
+    
+    <table class="table table-secondary table-hover">
+          <thead>
+            <tr> 
+                <th scope="col">N° </th>                
+              <th scope="col">ID </th>
+              <th scope="col">ID Cart</th>
+              <th scope="col">Titre Produit</th>
+              <th scope="col">Prix Unitaire</th>
+              <th scope="col">Quantité</th>
+
+              <th scope="col">Sous total</th>
+              
+            </tr>
+         
+          </thead>
+          <tbody>
+
+            {% for cartproduct in  order.cart.cartproduct_set.all %}
+            <tr> 
+            <td>{{forloop.counter}}</td>
+              <td>{{cartproduct.id}}</td>               
+              <td>{{cartproduct.cart.id}}</td>
+            <td> <a href="{% url 'ecommerceApp:product-detail' cartproduct.product.slug %}">{{cartproduct.product.title  }}  </a>  </td>
+              <td>{{cartproduct.rate}} F CFA</td>
+              <td>{{cartproduct.quantity}} F CFA </td>
+              <td>{{cartproduct.subtotal}} F CFA</td>
+                           
+            </tr>  
+                     
+            {% endfor %}
+           
+          </tbody>
+      </table>
+
+</div>
+
+  
+  </div>
+
+  <div class="row">
+    
+    <div class="col-sm-12 col-md-8 mx-auto">
+        <h2 class=" p-2 text-center border-b-2 ">Modifier la Statut de la Commande</h2> 
+
+        <form action="{% url 'ecommerceApp:admin-order-change' order.id %}" method="POST">
+
+            {% csrf_token%}
+            <select name="status">
+            {% for ind, status in orders_status %}
+             <option value="{{ind}}"  {% if ind == order.order_status %} selected {% endif %}>{{status}}</option>
+             {% endfor %}
+            </select>
+
+            <button class="btn btn-primary" type="submit">Modifier</button>
+             
+        </form>
+                
+
+</div>
+
+
+  {% endblock %}
+
+        
+
+
+
