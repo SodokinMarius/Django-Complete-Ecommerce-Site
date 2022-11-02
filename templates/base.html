@@ -28,12 +28,12 @@
 
     </head>
     <body>
-        <header  class="mb-5">
-        <nav class="navbar  navbar-expand-md  navbar-light fixed-top ">
+        <header  class="my-5 ">
+        <nav class="navbar  navbar-expand-md  navbar-light fixed-top  "style="background-color:#00008B">
             <!--a href="..&/index.html" class="btn bg-primary text-white position-fixed ms-2" data-bs-toggle="tooltip"
             data-bs-placement="right" title="Ne pas inclure dans l'intégration">Retour</a-->
-            <div class="container-fluid py-3 bg-secondary ">
-                    <a href="index.html" class="navbar-brand text-uppercase fw-bold"> 
+            <div class="container-fluid py-3  ">
+                    <a href="index.html" class="navbar-brand text-uppercase fw-bold text-warning"> 
                       <span class="bg-gradiant text-light p-2 rounded-3">DIGIT</span>  
                         Ecommerce</a>
 
@@ -80,8 +80,23 @@
 
     </div>
     </header>
+
+    <div class="container position-relative " style="margin-top : 50px;">
+
+        <div class="row">
+         
+         <div class="col col-md-8 mx-auto" style="margin-top : 50px;">
+                <form action="{% url 'ecommerceApp:search-product' %}" method="GET">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Research by title..." aria-label="Recipient's username" aria-describedby="button-addon2" name="product_keyword" required>
+                        <button class="btn btn-outline-primary" type="submit" id="button-addon2">Rechercher</button>
+                      </div>
+                </form>
+         </div>
+        </div>
+    </div
     
-    <main class="mt-5">
+    <main class="mt-2">
         {% block content %}
 
         {% endblock %}

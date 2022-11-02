@@ -10,6 +10,7 @@ from .forms import CheckoutForm,RegistrationForm,CustomerLoginForm
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate,login,logout
 
+from django.db.models import Q 
 
 #Let's assign the cart to a customer
 class EcommerceMixin(object):
@@ -401,6 +402,16 @@ class AdminOrderStatusChangeView(View,AdminRequiredMixin):
         order.save()
         return redirect(reverse_lazy("ecommerceApp:admin-order-change",kwargs = {"pk": order_id}))
     
-           
+
+class ReSearchView(TemplateView):
+    template_name = 'research.html'
+    
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)  
+        keyword = self.request.GET.get('product_keyword')  
+        context["keyword"] = keyword 
+        print(f'{keyword},-----------------------------------------')
+        context["found_products"] = Product.objects.filter(Q(title__startswith=keyword) | Q(description__contains=keyword) | Q(return_policy__contains=keyword))
+        return context    
        
         

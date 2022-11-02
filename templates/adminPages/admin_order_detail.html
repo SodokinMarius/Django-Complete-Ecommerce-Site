@@ -25,7 +25,6 @@
     <p>Statut de la commande :  <span>{{order.order_status}}</span></p>
     <p> Date de création : <span>{{order.created_at}}</span> </p>
                
-     
   </div>
 
   <div class="col-sm-12 col-md-6">
@@ -56,8 +55,7 @@
             <td> <a href="{% url 'ecommerceApp:product-detail' cartproduct.product.slug %}">{{cartproduct.product.title  }}  </a>  </td>
               <td>{{cartproduct.rate}} F CFA</td>
               <td>{{cartproduct.quantity}} F CFA </td>
-              <td>{{cartproduct.subtotal}} F CFA</td>
-                           
+              <td>{{cartproduct.subtotal}} F CFA</td>                           
             </tr>  
                      
             {% endfor %}

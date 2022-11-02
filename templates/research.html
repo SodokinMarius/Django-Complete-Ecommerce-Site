@@ -1,0 +1,57 @@
+
+{% extends 'base.html' %}
+
+{% block title %}
+ Articles
+{% endblock %}
+
+  {% block content %}
+
+  
+  <div class="container ">
+
+    <h1 class=" p-3"> Résultat de la récherche pour  <span class="text-warning fw-bold">{{keyword}}</span> </h1> <hr>
+   
+    
+    {% for produit in found_products %}
+    <div class="row mx-auto">
+    <div class="col col-md-4">
+      <div class="card shadow border-2 border-primary img-fluid mb-2" style="width: 18rem; height:fix-content; object-fit:cover;">
+        <img src="{{ produit.image.url }}" class="card-img-top " alt="loading ..." style="height:100px;">
+
+        <h4 class="card-title fw-bolder text-center ">{{produit.title}}</h4>
+
+        <div class="card-body">            
+        <h5 class="card-title fw-bolder text-center">for {{produit.category.title}}</h5>
+
+          <p class="card-text text-center mt-3"> <strike>Price : {{produit.marked_price}} F CFA  </strike>| <span class="fw-bolder text-danger"> Ps : {{produit.selling_price}} F CFA <span></p>
+            <p> <a href="{%  url 'ecommerceApp:add-to-cart' produit_detail.id %}" class="btn btn-primary fs-6">Add to Cart</a></p>
+
+          <a href="{%  url 'ecommerceApp:product-detail' produit.slug %}" class="btn btn-dark fs-6">Details</a>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="col col-md-4">
+            
+        <p class="fw-light text-center fs-4">{{produit.description | truncatewords:25}}...</p>
+
+        <p class=" fw-light text-center fs-4"><span class="fw-bold">Pilitique de Retour :</span>{{produit_detail.return_policy | truncatewords:25}}...</p>
+
+  </div>
+
+</div>
+    {% endfor %}
+ 
+ <hr>
+
+    
+  </div>
+
+   {% endblock %}
+
+        
+
+
+
