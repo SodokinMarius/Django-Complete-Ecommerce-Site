@@ -12,6 +12,9 @@ from django.contrib.auth import authenticate,login,logout
 
 from django.db.models import Q 
 
+from django.core.paginator import Paginator
+
+
 #Let's assign the cart to a customer
 class EcommerceMixin(object):
     def dispatch(self, request, *args, **kwargs):
@@ -22,15 +25,21 @@ class EcommerceMixin(object):
                 cart_obj.customer = request.user.customer
                 cart_obj.save()
         return super().dispatch(request, *args, **kwargs)        
-       
-    
+           
 #Home view
 class HomeView(TemplateView,EcommerceMixin):
     template_name="home.html"
     
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
-        context['products']=Product.objects.all().order_by('-title')
+        all_product_list = Product.objects.all().order_by('-title')
+        paginator = Paginator( all_product_list,3)
+        
+        page_number = self.request.GET.get('page')
+
+        product_list = paginator.get_page(page_number)
+        
+        context['products']= product_list
         return  context
    
 
@@ -46,9 +55,19 @@ class ProductsView(TemplateView,EcommerceMixin):
     template_name="produits.html"
     
     def get_context_data(self, **kwargs):
-        context=super().get_context_data(**kwargs)
-        context['categories']=Category.objects.all().order_by('title')
+        context=super().get_context_data(**kwargs)           
+        
+        all_category_list = Category.objects.all().order_by('title')
+        paginator = Paginator( all_category_list ,3)
+        
+        page_number = self.request.GET.get('page')
+
+        category_list = paginator.get_page(page_number)
+        
+        context['categories']= category_list
+        
         return  context
+    
 
 class ProductDetailView(TemplateView,EcommerceMixin):
     template_name="product-detail.html"
