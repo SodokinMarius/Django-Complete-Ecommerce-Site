@@ -5,7 +5,7 @@ from django.views.generic import TemplateView,View, CreateView,FormView,DetailVi
 from .models import *
 from django.contrib.auth.models import User
 
-from .forms import CheckoutForm,RegistrationForm,CustomerLoginForm
+from .forms import CheckoutForm,RegistrationForm,CustomerLoginForm,ProductForm
 
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate,login,logout
@@ -439,3 +439,20 @@ class AdminProductsView(AdminRequiredMixin,ListView):
     queryset = Product.objects.all().order_by('-id')
     context_object_name = "products"
         
+class AdminAddProductView(AdminRequiredMixin,CreateView):
+    template_name =  "adminPages/admin_add_product.html"
+    form_class = ProductForm
+    success_url = reverse_lazy('ecommerceApp:admin-products')  
+    
+    def form_valid(self, form):
+        product = form.save()
+        images = self.request.FILES.getlist('more_images')
+        
+        print(f'{product.title},-------------------------------1----------')
+
+        for image in images :
+            img = ProductImage.objects.create(product=product,image=image)
+            print(f'{img.product.title},-----------------222p--------------1----------')
+        return super().form_valid(form) 
+    
+    

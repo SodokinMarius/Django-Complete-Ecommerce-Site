@@ -1,4 +1,3 @@
-from queue import Empty
 from django.urls import path
 
 from .views import (
@@ -24,6 +23,7 @@ from .views import (
     AdminOrderStatusChangeView,
     ReSearchView,
     AdminProductsView,
+    AdminAddProductView,
     )
 
 app_name="ecommerceApp"
@@ -50,7 +50,6 @@ urlpatterns = [
     path("admin-order/<int:pk>/change",AdminOrderStatusChangeView.as_view(),name='admin-order-change'),
     path("research/",ReSearchView.as_view(),name='search-product'),
     path("admin-products/",AdminProductsView.as_view(),name="admin-products"),
-
-
+    path("admin-add-product/",AdminAddProductView.as_view(),name="admin-add-product"),
 
 ]

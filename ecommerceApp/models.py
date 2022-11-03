@@ -1,7 +1,4 @@
 
-from distutils.command.upload import upload
-from email.policy import default
-from enum import auto
 from telnetlib import STATUS
 from django.db import models
 
@@ -35,16 +32,16 @@ class Category(models.Model):
         return  self.title
 
 class Product(models.Model):
-    title = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True)
-    category =  models.ForeignKey(Category, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='products')
-    marked_price = models.PositiveBigIntegerField()
-    selling_price = models.PositiveBigIntegerField()
-    description = models.TextField()
-    warranty = models.CharField(max_length=300, null=True,blank=True)
-    return_policy = models.CharField(max_length=300, null=True,blank=True)
-    view_count = models.PositiveIntegerField(default=0)
+    title = models.CharField(max_length=200,verbose_name='Titre')
+    slug = models.SlugField(unique=True,verbose_name='Nom Unique')
+    category =  models.ForeignKey(Category, on_delete=models.CASCADE,verbose_name='Categorie')
+    image = models.ImageField(upload_to='products',verbose_name='Image')
+    marked_price = models.PositiveBigIntegerField(verbose_name="Prix D'Achat")
+    selling_price = models.PositiveBigIntegerField(verbose_name='Prix de Vente')
+    description = models.TextField(verbose_name='Description')
+    warranty = models.CharField(max_length=300, null=True,blank=True,verbose_name='Garantie')
+    return_policy = models.CharField(max_length=300, null=True,blank=True,verbose_name='Politique de retour')
+    view_count = models.PositiveIntegerField(default=0,verbose_name='Titre')
     
     def __str__(self):
         return self.title
