@@ -23,6 +23,7 @@ from .views import (
     AdminOrderDetailView, 
     AdminOrderStatusChangeView,
     ReSearchView,
+    AdminProductsView,
     )
 
 app_name="ecommerceApp"
@@ -48,6 +49,8 @@ urlpatterns = [
     path("admin-order-detail/<int:pk>/",AdminOrderDetailView.as_view(),name='admin-order-detail'),
     path("admin-order/<int:pk>/change",AdminOrderStatusChangeView.as_view(),name='admin-order-change'),
     path("research/",ReSearchView.as_view(),name='search-product'),
+    path("admin-products/",AdminProductsView.as_view(),name="admin-products"),
+
 
 
 ]

@@ -29,10 +29,10 @@
     </head>
     <body>
         <header  class="mb-5">
-        <nav class="navbar  navbar-expand-md  navbar-light fixed-top ">
+        <nav class="navbar  navbar-expand-md  fixed-top  "style="background-color:#00008B"">
             <!--a href="..&/index.html" class="btn bg-primary text-white position-fixed ms-2" data-bs-toggle="tooltip"
             data-bs-placement="right" title="Ne pas inclure dans l'intégration">Retour</a-->
-            <div class="container-fluid py-3 bg-secondary ">
+            <div class="container-fluid py-3 ">
                     <a href="index.html" class="navbar-brand text-uppercase fw-bold"> 
                       <span class="bg-gradiant text-light p-2 rounded-3">DIGIT</span>  
                         Ecommerce</a>
@@ -47,6 +47,11 @@
                             <li class="nav-item active">
                                 <a class="nav-link text-light" href="{% url 'ecommerceApp:admin-home' %}">Admin-Home</a>
                             </li>
+
+                            <li class="nav-item ">
+                                <a class="nav-link text-light" href="{% url 'ecommerceApp:admin-products' %}">Products</a>
+                            </li>
+
                             <li class="nav-item">
                                 <a class="nav-link text-light" href="{% url 'ecommerceApp:admin-all-order' %}">All-Order</a>
                             </li>

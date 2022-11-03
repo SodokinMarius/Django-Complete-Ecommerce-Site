@@ -422,7 +422,7 @@ class AdminOrderStatusChangeView(View,AdminRequiredMixin):
         return redirect(reverse_lazy("ecommerceApp:admin-order-change",kwargs = {"pk": order_id}))
     
 
-class ReSearchView(TemplateView):
+class ReSearchView(TemplateView,AdminRequiredMixin):
     template_name = 'research.html'
     
     def get_context_data(self, **kwargs):
@@ -431,6 +431,11 @@ class ReSearchView(TemplateView):
         context["keyword"] = keyword 
         print(f'{keyword},-----------------------------------------')
         context["found_products"] = Product.objects.filter(Q(title__startswith=keyword) | Q(description__contains=keyword) | Q(return_policy__contains=keyword))
-        return context    
-       
+        return context  
+    
+    
+class AdminProductsView(AdminRequiredMixin,ListView):
+    template_name = "adminPages/admin_products.html"
+    queryset = Product.objects.all().order_by('-id')
+    context_object_name = "products"
         
