@@ -14,6 +14,13 @@
     
     <div class="col-sm-12 col-md-6">
         <img src="{{ produit_detail.image.url }}" alt="wait loading..." class=" img-fluid border-1" />
+        <div class="row">
+          {% for  product_image in produit_detail.productimage_set.all %}
+          <div class="col-md-6">
+            <img src="{{ product_image.image.url }}" alt="wait loading..." class=" img-fluid border-1" style="height:150px; background:transparent;" />            
+          </div>
+          {% endfor%}
+        </div>
     </div>
 
     <div class="col-sm-12 col-md-6">
