@@ -11,17 +11,42 @@ class CheckoutForm(forms.ModelForm):
     
 
 class RegistrationForm(forms.ModelForm):
-    username = forms.CharField(max_length=200,widget=forms.TextInput())
-    password = forms.CharField(widget=forms.PasswordInput())
-    email =  forms.CharField(widget=forms.TextInput())
+    username = forms.CharField(max_length=200,widget=forms.TextInput(attrs={
+                "class" : "form-control text-center",
+                "placeholder" : "Ex : SODYAM ..."
+            }),label="Nom Utilisateur")
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+                "class" : "form-control text-center",
+                "placeholder" : "..."
+            }),label="Mot de Passe")
+    email =  forms.CharField(widget=forms.TextInput(attrs={
+                "class" : "form-control text-center",
+                "placeholder" : "Ex : exemple@gmail.com ..."
+            }), label="L'adresse Email")
     
     class Meta :
         model = Customer
         fields = ["username","password","email","full_name","telephone","adresse"]
-    
+
+        widgets ={
+            'full_name' : forms.TextInput(attrs={
+                "class" : "form-control text-center",
+                "placeholder" : "Ex : SODOKIN Yao Marius"
+            }),
+            'telephone' : forms.TextInput(attrs={
+                "class" : "form-control text-center",
+                "placeholder" : "Ex : +229 90500075"
+            }),
+            
+             'adresse' : forms.TextInput(attrs={
+                "class" : "form-control text-center",
+                "placeholder" : "Ex :  Cotonou, Akpakpa"
+            }),
+        }
+         
     def clean_username(self) :
         username = self.cleaned_data['username']
-        if User.objects.filter(username=username).exists():
+        if User.objects.filter(username=username).exists() :
             raise ValidationError(
                 'This user alredy exists !!'
             )
@@ -29,8 +54,14 @@ class RegistrationForm(forms.ModelForm):
     
 
 class CustomerLoginForm(forms.Form):
-    username = forms.CharField(max_length=200,widget=forms.TextInput())
-    password = forms.CharField(widget=forms.PasswordInput())
+    username = forms.CharField(max_length=200,widget=forms.TextInput(attrs={
+                "class" : "form-control text-center",
+                "placeholder" : "Ex : SODYAM ..."
+            }),label="Nom Utilisateur")
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+                "class" : "form-control text-center",
+                "placeholder" : "..."
+            }),label="Mot de Passe")
     
 class ProductForm(forms.ModelForm):
     
@@ -97,12 +128,38 @@ class PasswordForgotForm(forms.Form):
     
     def clean_email(self):
         email = self.cleaned_data.get('email')
+        
         if Customer.objects.filter(user__email=email).exists():
             pass 
         else :
-            forms.ValidationError('User with this email does not exists')
-     
-   
+            raise forms.ValidationError('User with this email does not exists')
+            
+        return email
+
+
+
+class PasswordResetForm(forms.Form):
+    new_password = forms.CharField(widget=forms.PasswordInput(attrs={
+        "class": "form-control",
+        'autocomplete' : "new password",
+        "placeholder" : "Enter the new password",
+    
+    }),label="Entrer votre nouveau mot de Passe ")
+    
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
+    "class": "form-control",
+    'autocomplete' : "confirm password",
+    "placeholder" : "Confirm the new password",
+
+}),label="Confirmer votre nouveau mot de Passe ")
+    
+def clean_confirm_password(self):
+    new_password = self.clean_data.get("new_password")
+    confirmed_password = self.clean_data.get("confirm_password")
+    if new_password != confirmed_password :
+        raise forms.ValidationError("The passwords are not match !! ")    
+    return confirmed_password
     
    
     
+   

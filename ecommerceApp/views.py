@@ -5,7 +5,7 @@ from django.views.generic import TemplateView,View, CreateView,FormView,DetailVi
 from .models import *
 from django.contrib.auth.models import User
 
-from .forms import CheckoutForm,RegistrationForm,CustomerLoginForm,ProductForm,PasswordForgotForm
+from .forms import CheckoutForm,RegistrationForm,CustomerLoginForm,ProductForm,PasswordForgotForm,PasswordResetForm
 
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate,login,logout
@@ -13,6 +13,13 @@ from django.contrib.auth import authenticate,login,logout
 from django.db.models import Q 
 
 from django.core.paginator import Paginator
+
+from .utils import password_reset_token
+
+from django.core.mail import send_mail  
+
+from django.conf import settings     
+
 
 
 #Let's assign the cart to a customer
@@ -455,14 +462,60 @@ class AdminAddProductView(AdminRequiredMixin,CreateView):
 class PasswordForgotView(FormView):
     template_name = "password_forgot.html"
     form_class = PasswordForgotForm 
-    success_url = reverse_lazy('ecommerceApp:mail-sent')
+    success_url = "/password-forgot/?msg=sent"
     
     def form_valid(self, form):
-        email = form.cleaned_data.get('email')        
+        _email = form.cleaned_data.get('email') 
+        print(_email,"email *****************************")
+        customer = Customer.objects.get(user__email=_email)
+        user = customer.user
+        url = self.request.META.get('HTTP_HOST') 
+        text_content = "Please, Click the link below to reset your password !"
+        html_content = url + '/password-reset/' + _email +'/' + password_reset_token.make_token(user) + '/' 
+        
+        send_mail(
+            "Password Reset link | DIGIT Ecommerce",
+            text_content + html_content,
+            settings.EMAIL_HOST_USER,
+            [_email],
+            fail_silently=False,
+        )       
+              
         return super().form_valid(form)
     
     
 class EmailSentView(View):
    def get(self,request,*args,**kwargs):
        return redirect(reverse_lazy('ecommerceApp:password-forgot'))
+
+class PasswordResetView(FormView):
+    template_name = 'password_reset.html'
+    form_class = PasswordResetForm 
+    success_url = reverse_lazy('ecommerceApp:customer-login')
+    
+    
+    def dispatch(self, request, *args, **kwargs) :
+        email = self.kwargs.get("email")
+        print("Token :",self.request.GET.get("email"),"----------------")
+        user = User.objects.get(email=email)
+        token = self.kwargs.get("token")
+        if user is not None and password_reset_token.check_token(user,token): 
+            pass 
+        else :
+            return redirect(reverse_lazy('ecommerceApp:password-forgot') + "?msg=error")    #make user retake the password reset form filling      
+           
+        return super().dispatch(request, *args, **kwargs)
+    
+    
+    def form_valid(self, form) :
+        password = form.cleaned_data.get('confirm_password')
+        email = self.kwargs.get("email")
+        user = User.objects.get(email=email)
+        user.set_password(password)            
+        user.save()
+        return super().form_valid(form)
+    
+    
+    
+    
     

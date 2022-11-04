@@ -1,9 +1,7 @@
 
-from telnetlib import STATUS
 from django.db import models
 
 from django.contrib.auth.models import User
-
 
 class Admin(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
@@ -16,9 +14,9 @@ class Admin(models.Model):
     
 class Customer(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=300)
-    telephone = models.CharField(max_length=30)
-    adresse = models.CharField(max_length=300,null=True,blank=True)
+    full_name = models.CharField(max_length=300,verbose_name='Nom Complet')
+    telephone = models.CharField(max_length=30,verbose_name='Numéro de téléphone')
+    adresse = models.CharField(max_length=300,null=True,blank=True,verbose_name='Adresse de residence')
     joined_on = models.DateTimeField(auto_now_add=True)
      
     def __str__(self):

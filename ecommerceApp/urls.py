@@ -26,6 +26,7 @@ from .views import (
     AdminAddProductView,
     PasswordForgotView,
     EmailSentView,
+    PasswordResetView,
     )
 
 app_name="ecommerceApp"
@@ -55,6 +56,8 @@ urlpatterns = [
     path("admin-add-product/",AdminAddProductView.as_view(),name="admin-add-product"),
     path("password-forgot/",PasswordForgotView.as_view(),name="password-forgot"),
     path("email-sent/",EmailSentView.as_view(),name="mail-sent"),
+    path("password-reset/<email>/<token>/",PasswordResetView.as_view(),name="password-reset"),
+
 
     
    

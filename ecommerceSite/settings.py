@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ecommerceApp',
+    'six',
 ]
 
 MIDDLEWARE = [
@@ -117,6 +118,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+#STATICFILES_DIRS = [BASE_DIR.joinpath('static/')]
 
 # Adding configurations
 STATICFILES_DIRS = [BASE_DIR / "static"]
@@ -129,4 +131,9 @@ MEDIA_ROOT = BASE_DIR /"media"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#asgiref==3.5.2 backports.zoneinfo==0.2.1
+#Django Email configuration
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'yaomariussodokin@gmail.com'
+EMAIL_HOST_PASSWORD = 'ofhkbvdvtlazcxkx'

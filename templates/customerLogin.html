@@ -14,8 +14,8 @@
     
     <div class="col-sm-12 col-md-8 mx-auto" >
         <form action="" method="POST">
-           {% if errors %}
-           <p>{{errors}}</p>
+           {% if errors  %}
+           <p style="color:red; font-size:1.5rem,font-weight:bold;font-family:Arial"class="alert alert-danger" role="alert" >{{errors}}</p>
            {% endif %}
 
             {% csrf_token %}
@@ -26,6 +26,7 @@
         <p> Vous n'avez pas encore de compte ? <a href="{% url 'ecommerceApp:customer-registration' %}
             {% if request.GET.next %}next={{ request.GET.next}}{% endif %}"> S'inscrire </a> </p>
 
+            <p>Mot de passe oublié  ?  <a href="{% url 'ecommerceApp:password-forgot' %}"> Réinitialier</a> </p>
     </div>
 
   </div>
