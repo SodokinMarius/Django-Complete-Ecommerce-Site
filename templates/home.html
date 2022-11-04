@@ -10,11 +10,11 @@
   <h1 class=" p-5">Bienvenue notre plateforme d'Ecommerce !! Nous somme là pour votre satisfaction</h1>
   <div class="container">
 
-   <div class="row">
+   <div class="row gy-2">
     {% for produit in products %}
-    <div class="col col-md-4">
-      <div class="card shadow border-2 border-primary img-fluid mb-2" style="width: 18rem; height:fix-content; object-fit:cover;">
-        <img src="{{ produit.image.url }}" class="card-img-top" alt="loading ...">
+    <div class="col col-md-3">
+      <div class="card shadow border-1 border-primary img-fluid mb-2" style="width: 18rem; height:400px; object-fit:cover;">
+        <img src="{{ produit.image.url }}" class="card-img-top" alt="loading ..." style="height:55%;">
         <div class="card-body">
           <h5 class="card-title fw-bolder">{{produit.title}}</h5>
           <p class="card-text text-center mt-3"> <strike>Price : {{produit.marked_price}} F CFA  </strike>| <span class="fw-bolder"> Ps : {{produit.selling_price}} F CFA <span></p>

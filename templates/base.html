@@ -73,6 +73,18 @@
                             <li class="nav-item">
                                 <a class="nav-link text-light" href="{% url 'ecommerceApp:customer-profile' %}">Mon profile</a>
                             </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-light fw-bolder" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  {{request.user.username }}
+                                </a>
+                                <ul class="dropdown-menu bg-warning" aria-labelledby="navbarDropdown">
+                                  <li><a class="dropdown-item text-light" href="{% url 'ecommerceApp:customer-profile' %}">Profile</a></li>
+                                  <li><a class="dropdown-item text-light" href="{% url 'ecommerceApp:customer-logout' %}">Deconnextion</a></li>
+                                  <li><hr class="dropdown-divider"></li>
+                                  <li><a class="dropdown-item" href="{% url 'ecommerceApp:customer-login' %}">Connexion</a></li>
+                                </ul>
+                              </li>
                         </ul>
                         
             </div>

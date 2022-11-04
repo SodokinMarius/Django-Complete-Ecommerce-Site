@@ -40,7 +40,7 @@ class HomeView(TemplateView,EcommerceMixin):
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
         all_product_list = Product.objects.all().order_by('-title')
-        paginator = Paginator( all_product_list,3)
+        paginator = Paginator( all_product_list,8)
         
         page_number = self.request.GET.get('page')
 
