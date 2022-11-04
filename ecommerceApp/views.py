@@ -5,7 +5,7 @@ from django.views.generic import TemplateView,View, CreateView,FormView,DetailVi
 from .models import *
 from django.contrib.auth.models import User
 
-from .forms import CheckoutForm,RegistrationForm,CustomerLoginForm,ProductForm
+from .forms import CheckoutForm,RegistrationForm,CustomerLoginForm,ProductForm,PasswordForgotForm
 
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate,login,logout
@@ -169,11 +169,7 @@ class CartManageView(View,EcommerceMixin):
         action = request.GET.get("action")
         cartproduct_obj = CartProduct.objects.get(id=cartproduct_id)
         cart_for_product =  cartproduct_obj.cart
-        
-        '''cart_id_in_session = self.request.session.get("cart_id",None)
-        if cart_id_in_session:
-            cart_obj_in_session = Cart.objects.get(id=cart_id_in_session)'''
-        
+              
         if action == 'increase':
             cartproduct_obj.quantity += 1
             cartproduct_obj.subtotal +=  cartproduct_obj.rate
@@ -455,4 +451,18 @@ class AdminAddProductView(AdminRequiredMixin,CreateView):
             print(f'{img.product.title},-----------------222p--------------1----------')
         return super().form_valid(form) 
     
+
+class PasswordForgotView(FormView):
+    template_name = "password_forgot.html"
+    form_class = PasswordForgotForm 
+    success_url = reverse_lazy('ecommerceApp:mail-sent')
+    
+    def form_valid(self, form):
+        email = form.cleaned_data.get('email')        
+        return super().form_valid(form)
+    
+    
+class EmailSentView(View):
+   def get(self,request,*args,**kwargs):
+       return redirect(reverse_lazy('ecommerceApp:password-forgot'))
     

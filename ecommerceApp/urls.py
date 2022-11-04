@@ -24,6 +24,8 @@ from .views import (
     ReSearchView,
     AdminProductsView,
     AdminAddProductView,
+    PasswordForgotView,
+    EmailSentView,
     )
 
 app_name="ecommerceApp"
@@ -51,5 +53,10 @@ urlpatterns = [
     path("research/",ReSearchView.as_view(),name='search-product'),
     path("admin-products/",AdminProductsView.as_view(),name="admin-products"),
     path("admin-add-product/",AdminAddProductView.as_view(),name="admin-add-product"),
+    path("password-forgot/",PasswordForgotView.as_view(),name="password-forgot"),
+    path("email-sent/",EmailSentView.as_view(),name="mail-sent"),
+
+    
+   
 
 ]

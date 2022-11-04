@@ -88,6 +88,19 @@ class ProductForm(forms.ModelForm):
                 "placeholder" : "Evenement de retour..."
             }),
         }
+    
+class PasswordForgotForm(forms.Form):
+    email = forms.CharField(widget=forms.EmailInput(attrs={
+        'class' : "form-control",
+        "placeholer" : "provide the mail used for customer account ...",        
+    }))
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if Customer.objects.filter(user__email=email).exists():
+            pass 
+        else :
+            forms.ValidationError('User with this email does not exists')
      
    
     
